@@ -27,34 +27,47 @@ def choose(root):
     enter.pack()
 def show(zeitspanne, Kategorie, root,root1):
     root1.destroy()
-    date,monat,jahr = datum()
+    date,month,year = datum()
     if Kategorie == "Alle":
         if zeitspanne == "1 month":
-            cursor.execute("SELECT datum,menge FROM Investments WHERE jahr = jahr AND monat = monat")
+            cursor.execute("SELECT datum,menge FROM Investments WHERE jahr = ? AND monat = ?", (year, month,))
         elif zeitspanne == "3 months":
-            cursor.execute("SELECT monat,menge FROM Investments WHERE jahr = jahr ORDER BY monat DESC LIMIT monat-3")
+            limit = month - 3
+            cursor.execute(
+                "SELECT monat, menge FROM Investments WHERE jahr = ? ORDER BY monat DESC LIMIT ?",
+                (year, limit)
+            )
         elif zeitspanne == "1 Year":
-            cursor.execute("SELECT monat,menge FROM Investments WHERE jahr = jahr ORDER BY monat DESC ")
+            cursor.execute("SELECT monat,menge FROM Investments WHERE jahr = ? ORDER BY monat DESC ",(year,))
         elif zeitspanne == "3 Years":
-            cursor.execute("SELECT jahr,menge FROM Investments ORDER BY jahr DESC LIMIT jahr-3")
+            limit = year - 3
+            cursor.execute("SELECT jahr,menge FROM Investments ORDER BY jahr DESC LIMIT ?", (limit,))
         elif zeitspanne == "10 Years":
-            cursor.execute("SELECT jahr,menge FROM Investments ORDER BY jahr DESC LIMITj jahr- 10")
+            limit = year - 10
+            cursor.execute("SELECT jahr,menge FROM Investments ORDER BY jahr DESC LIMIT ?", (limit,))
         elif zeitspanne == "Since beginning":
             cursor.execute("SELECT jahr,menge FROM Investments ORDER BY jahr DESC")
 
     else:
-        if zeitspanne == "1 month" :
-            cursor.execute("SELECT datum,menge FROM Investments WHERE jahr = jahr AND monat = monat AND kategorie = ?", (Kategorie,))
+        if zeitspanne == "1 month":
+            cursor.execute("SELECT datum,menge FROM Investments WHERE jahr = ? AND monat = ? AND Kategorie = ?", (year, month,Kategorie,))
         elif zeitspanne == "3 months":
-            cursor.execute("SELECT monat,menge FROM Investments WHERE jahr = jahr AND kategorie = ? ORDER BY monat DESC LIMIT monat-3",(Kategorie,))
+            limit = month - 3
+            cursor.execute(
+                "SELECT monat, menge FROM Investments WHERE jahr = ? ORDER BY monat DESC LIMIT ? AND Kategorie = ?",
+                (year, limit, Kategorie,)
+            )
         elif zeitspanne == "1 Year":
-            cursor.execute("SELECT monat,menge FROM Investments WHERE jahr = jahr ORDER BY monat DESC ")
+            cursor.execute("SELECT monat,menge FROM Investments WHERE jahr = ? AND Kategorie = ? ORDER BY monat DESC ",(year,Kategorie,))
         elif zeitspanne == "3 Years":
-            cursor.execute("SELECT jahr,menge FROM Investments ORDER BY jahr DESC LIMIT 3")
+            limit = year - 3
+            cursor.execute("SELECT jahr,menge FROM Investments WHERE Kategorie = ? ORDER BY jahr DESC LIMIT ?", (Kategorie,limit,))
         elif zeitspanne == "10 Years":
-            cursor.execute("SELECT jahr,menge FROM Investments ORDER BY jahr DESC LIMIT 10")
+            limit = year - 10
+            cursor.execute("SELECT jahr,menge FROM Investments WHERE Kategorie = ? ORDER BY jahr DESC LIMIT ?", (Kategorie,limit,))
         elif zeitspanne == "Since beginning":
-            cursor.execute("SELECT jahr,menge FROM Investments ORDER BY jahr DESC")
+            cursor.execute("SELECT jahr,menge FROM Investments WHERE Kategorie = ? ORDER BY jahr DESC", (Kategorie,))
+
     Liste = cursor.fetchall()
     d = Liste[0][0]
     x = []
