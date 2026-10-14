@@ -6,6 +6,7 @@ import datetime
 conn = sql.connect('Investments.db')
 cursor = conn.cursor()
 datum()
+#Create Tables
 cursor.execute('''CREATE TABLE IF NOT EXISTS Investments(
     id INTERGER PRIMARY KEY,
     menge INTEGER NOT NULL,
@@ -20,11 +21,14 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS Einteilungen(
     ausgaben INTEGER NOT NULL)
     ''')
 
-
 conn.close()
+
+#define root
 root = tk.CTk()
 root.title('Investments')
 root.geometry('500x500')
+
+#add objects
 tk.CTkLabel(root, text='Investments' , font=("Arial", 26, "bold")).pack()
 tk.CTkLabel(root, text='Geben SIe ihre Ausgaben an').pack()
 add = tk.CTkButton(root, text='Add',fg_color="#8b0000",width=200, height=50, command=lambda x = root:neu_Ausgabe(x))
